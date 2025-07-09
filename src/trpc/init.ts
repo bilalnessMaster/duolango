@@ -1,5 +1,8 @@
-import { initTRPC } from '@trpc/server';
+import { initTRPC, TRPCError } from '@trpc/server';
 import { cache } from 'react';
+import { headers as getHeaders } from 'next/headers';
+import { auth } from '@/lib/auth';
+import prisma from '@/lib/prism';
 export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context
@@ -19,4 +22,35 @@ const t = initTRPC.create({
 // Base router and procedure helpers
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
-export const baseProcedure = t.procedure;
+export const baseProcedure = t.procedure.use(async ({ next }) => {
+  const db = prisma
+
+  return next({
+    ctx: {
+      db,
+    }
+  })
+});
+
+
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
+  const headers = await getHeaders();
+  const session = await auth.api.getSession({
+    headers
+  })
+  if (!session?.user) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Not authenticated"
+    })
+  }
+  return next({
+    ctx: {
+      ...ctx,
+      session: {
+        ...session,
+        user: session.user
+      }
+    }
+  })
+})
