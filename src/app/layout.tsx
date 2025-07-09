@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Barlow} from "next/font/google";
+import { Barlow } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 
 const barlow = Barlow({
-  subsets : ['latin'],
-  variable : "--font-barlow-sans",
-  weight : ["200" , "300" , "500" , '700']
+  subsets: ['latin'],
+  variable: "--font-barlow-sans",
+  weight: ["200", "300", "500", '700']
 })
 
 export const metadata: Metadata = {
