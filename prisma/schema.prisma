@@ -20,10 +20,12 @@ model User {
   name          String?
   emailVerified Boolean
   image         String?
+  isSubscribed  Boolean?
   createdAt     DateTime
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  progress      Progress[]?
 
   @@map("user")
 }
@@ -38,7 +40,7 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  
   @@unique([token])
   @@map("session")
 }
@@ -58,7 +60,7 @@ model Account {
   password              String?
   createdAt             DateTime
   updatedAt             DateTime
-
+  
   @@map("account")
 }
 
@@ -72,3 +74,97 @@ model Verification {
 
   @@map("verification")
 }
+
+enum State {
+  compeleted 
+  in_progress
+  not_started
+}
+
+model Course {
+  id        String    @id
+  title     String
+  imageSrc  String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  units     Unit[]
+  progress  Progress?
+}
+
+model Unit {
+  id        String    @id
+  title     String
+  courseId  String
+  course    Course    @relation(fields : [courseId], references : [id], ondelete : cascade)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  lesson    Lesson[]
+  progress  Progress?
+}
+
+model Lessson {
+  id        String    @id
+  title     String
+  unitId    String
+  unit      Unit      @relation(fields : [unitId], references : [id], onDelete : Cascade)
+  order     Int     
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  question  Question[]
+  progress  Progress?
+}
+
+model Question {
+  id        String    @id
+  question  String
+  lessonId  String
+  lesson    Lesson    @relation(fields : [lessonId], references : [id], onDelete : Cascade)
+  order     Int 
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  options   Option[]
+}
+
+model Option {
+  id          String    @id
+  imageSrc    String
+  audioSrc    String
+  questionId  String
+  question    Question @relation(fields : [questionId], references : [id], onDelete : Cascade)
+  order       Int   
+  isCorrect   Boolean
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+
+
+model Progress { 
+  userId         String   @id
+  userName       String   @default("User")
+  userImageSrc   String   @default("/mascot.svg")
+  activeCourseId Int?
+  hearts         Int      @default(5)
+  points         Int      @default(0)
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activeCourse   Course?  @relation(fields: [activeCourseId], references: [id], onDelete: Cascade)
+
+  @@map("progress")
+}
+
+
+model LessonProgress {
+  id                  String   @id @default(uuid())
+  userId              String
+  lessonId            String
+  lastQuestionAnswered Int     @default(0)
+  completed           Boolean  @default(false)
+  updatedAt           DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson  Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@map("lesson_progress")
+}
+
