@@ -36,8 +36,9 @@ export const baseProcedure = t.procedure.use(async ({ next }) => {
 export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
   const headers = await getHeaders();
   const session = await auth.api.getSession({
-    headers
+    headers,
   })
+  // console.log("session in trpc : ",session)
   if (!session?.user) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
