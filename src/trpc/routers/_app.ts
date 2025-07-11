@@ -1,7 +1,6 @@
-import { z } from 'zod';
-import { baseProcedure, createTRPCRouter } from '../init';
+import { createTRPCRouter } from '../init';
 import { authRouter } from '@/modules/auth/server/procedure';
-import { staticsRouter } from '@/modules/home/statics/server/procedure';
+import { staticsRouter } from '@/modules/statics/server/procedure';
 export const appRouter = createTRPCRouter({
   auth: authRouter,
   statics : staticsRouter,

@@ -24,3 +24,15 @@ export const RightSideBar = () => {
     </div>
   )
 }
+
+
+export const RightSideBarSkeleton = () => {
+  return (
+    <div className="sticky top-6 w-full space-y-3 ">
+      <div className="border-2 border-neutral-100/10 bg-neutral-50 animate-pulse rounded-xl h-14 w-full" />
+      <div className="border-2 border-neutral-100/10 bg-neutral-50 animate-pulse rounded-xl h-55 w-full" />
+      <div className="border-2 border-neutral-100/10 bg-neutral-50 animate-pulse rounded-xl h-45 w-full" />
+      <div className="border-2 border-neutral-100/10 bg-neutral-50 animate-pulse rounded-xl h-30 w-full" />
+    </div>
+  )
+}  

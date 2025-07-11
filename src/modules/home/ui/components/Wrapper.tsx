@@ -1,5 +1,5 @@
 import { getQueryClient, trpc } from "@/trpc/server";
-import { RightSideBar } from "./right-side-bar";
+import { RightSideBar, RightSideBarSkeleton } from "./right-side-bar";
 import { Suspense } from "react";
 
 interface Props {
@@ -19,7 +19,7 @@ export const Wrapper = async ({ children }: Props) => {
         }
       </div>
       <div className="max-w-[340] w-full relative hidden md:block">
-          <Suspense fallback={ <div>Loading...</div> }>
+          <Suspense fallback={ <RightSideBarSkeleton /> }>
             <RightSideBar />
           </Suspense>
       </div>
