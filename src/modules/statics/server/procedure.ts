@@ -1,4 +1,3 @@
-import prisma from "@/lib/prism";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
 
@@ -17,6 +16,6 @@ export const staticsRouter = createTRPCRouter({
       }
     })
 
-    return {progress , user};
+    return { progress, user };
   })
 })

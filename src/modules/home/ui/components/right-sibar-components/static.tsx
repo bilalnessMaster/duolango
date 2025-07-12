@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import ReactCountryFlag from "react-country-flag"
+import Flag from 'react-flagpack'
 
 interface Props {
   hearts?: number;
@@ -11,9 +13,8 @@ export const Static = ({ hearts = 0, streaks, activeCoures }: Props) => {
 
 
   return (
-
     <div className="flex items-center justify-between">
-      <Item href={"/logos/es.svg"} />
+      <ReactCountryFlag countryCode="ES" sizes="120px" />
       <Item href="/logos/streaks.svg" statis={streaks} />
       <Item href="/logos/heart.svg" statis={hearts} className="text-red-500" />
     </div>
@@ -33,7 +34,8 @@ const Item = ({ href, className, statis }: { href: string, className?: string, s
         width={30}
         className="rounded"
         height={30}
-        alt={href} />
+        alt={href}
+      />
       <h2 className="font-semibold">{statis}</h2>
     </div>
   )
