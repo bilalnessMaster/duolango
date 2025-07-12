@@ -18,7 +18,7 @@ export const auth = betterAuth({
           id: user.id
         },
       })
-      console.log("user's attributes", extendUser)
+      // console.log("user's attributes", extendUser)
       return {
         user: {
           ...extendUser,

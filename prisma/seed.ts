@@ -1,7 +1,16 @@
+
+import { State } from "@/generated/prisma";
 import prisma from "@/lib/prism";
 
 // scripts/seed.ts
 async function main() {
+  // Constants
+  const USER_ID = 'EGnlQrGky5vl4GomXnSWHCf2cXysbNb2';
+  const AUDIO_PATHS = [
+    'es_boy.mp3', 'es_girl.mp3', 'es_man.mp3',
+    'es_woman.mp3', 'es_robot.mp3', 'es_zombie.mp3'
+  ];
+
   // Create Spanish course
   const spanishCourse = await prisma.course.create({
     data: {
@@ -13,163 +22,117 @@ async function main() {
     },
   });
 
-  // Create units for Spanish course
-  const [basicsUnit, greetingsUnit] = await prisma.$transaction([
+  // Create units with simple titles
+  const units = await prisma.$transaction([
     prisma.unit.create({
-      data: {
-        id: 'unit_es_1',
-        title: 'Unit 1: Basics',
-        courseId: spanishCourse.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+      data: { id: 'unit_1', title: 'Basics', courseId: spanishCourse.id }
     }),
     prisma.unit.create({
-      data: {
-        id: 'unit_es_2',
-        title: 'Unit 2: Greetings',
-        courseId: spanishCourse.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+      data: { id: 'unit_2', title: 'Everyday', courseId: spanishCourse.id }
+    }),
+    prisma.unit.create({
+      data: { id: 'unit_3', title: 'Food', courseId: spanishCourse.id }
+    }),
+    prisma.unit.create({
+      data: { id: 'unit_4', title: 'Travel', courseId: spanishCourse.id }
     }),
   ]);
 
-  // Create lessons for Basics unit
-  const [animalsLesson, colorsLesson] = await prisma.$transaction([
-    prisma.lesson.create({
-      data: {
-        id: 'lesson_es_1_1',
-        title: 'Animals',
-        unitId: basicsUnit.id,
-        order: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    }),
-    prisma.lesson.create({
-      data: {
-        id: 'lesson_es_1_2',
-        title: 'Colors',
-        unitId: basicsUnit.id,
-        order: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    }),
-  ]);
+  // Create 7 lessons per unit with practical titles
+  for (const [unitIndex, unit] of units.entries()) {
+    const lessonTitles = [
+      'Greetings',
+      'Numbers',
+      'Colors',
+      'Family',
+      'Shopping',
+      'Directions',
+      'Emergency'
+    ];
 
-  // Create questions for Animals lesson
-  const [dogQuestion, catQuestion] = await prisma.$transaction([
-    prisma.question.create({
-      data: {
-        id: 'question_es_1_1_1',
-        question: 'What is "dog" in Spanish?',
-        lessonId: animalsLesson.id,
-        order: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    }),
-    prisma.question.create({
-      data: {
-        id: 'question_es_1_1_2',
-        question: 'What is "cat" in Spanish?',
-        lessonId: animalsLesson.id,
-        order: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    }),
-  ]);
+    for (const [index, title] of lessonTitles.entries()) {
+      const lesson = await prisma.lesson.create({
+        data: {
+          id: `unit_${unitIndex + 1}_lesson_${index + 1}`,
+          title,
+          unitId: unit.id,
+          order: index + 1
+        }
+      });
 
-  // Create options for questions (using your audio assets)
-  await prisma.option.createMany({
-    data: [
-      // Options for dog question
-      {
-        id: 'option_es_1_1_1',
-        imageSrc: 'logos/dog.svg',
-        audioSrc: 'audios/es_boy.mp3',
-        questionId: dogQuestion.id,
-        order: 1,
-        isCorrect: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 'option_es_1_1_2',
-        imageSrc: 'logos/cat.svg',
-        audioSrc: 'audios/es_girl.mp3',
-        questionId: dogQuestion.id,
-        order: 2,
-        isCorrect: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      // Options for cat question
-      {
-        id: 'option_es_1_1_3',
-        imageSrc: 'logos/cat.svg',
-        audioSrc: 'audios/es_woman.mp3',
-        questionId: catQuestion.id,
-        order: 1,
-        isCorrect: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 'option_es_1_1_4',
-        imageSrc: 'logos/dog.svg',
-        audioSrc: 'audios/es_man.mp3',
-        questionId: catQuestion.id,
-        order: 2,
-        isCorrect: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ],
-  });
+      // Create 3 questions per lesson
+      for (let q = 1; q <= 3; q++) {
+        const question = await prisma.question.create({
+          data: {
+            id: `q_${unitIndex + 1}_${index + 1}_${q}`,
+            question: `Sample question ${q} for ${title}`,
+            lessonId: lesson.id,
+            order: q
+          }
+        });
 
-  // Create progress records for both users
+        // Create 4 options per question
+        await prisma.option.createMany({
+          data: [
+            {
+              id: `opt_${unitIndex + 1}_${index + 1}_${q}_1`,
+              imageSrc: `logos/${q % 2 === 0 ? 'boy' : 'girl'}.svg`,
+              audioSrc: `audios/${AUDIO_PATHS[(unitIndex + index + q) % AUDIO_PATHS.length]}`,
+              questionId: question.id,
+              order: 1,
+              isCorrect: true
+            },
+            {
+              id: `opt_${unitIndex + 1}_${index + 1}_${q}_2`,
+              imageSrc: `logos/${q % 2 === 0 ? 'cat' : 'dog'}.svg`,
+              audioSrc: `audios/${AUDIO_PATHS[(unitIndex + index + q + 1) % AUDIO_PATHS.length]}`,
+              questionId: question.id,
+              order: 2,
+              isCorrect: false
+            },
+            // Add 2 more options...
+          ]
+        });
+      }
+    }
+  }
+
+  // Create user progress
   await prisma.progress.create({
     data: {
-      userId: 'QKYBnczm1Z06nXqdLeVuD9fuoSnCqbIq', // Static user ID
-      userName: 'Test User 1',
-      userImageSrc: 'logos/boy.svg',
+      userId: USER_ID,
       activeCourseId: spanishCourse.id,
       hearts: 5,
-      points: 100,
-    },
+      points: 0
+    }
   });
 
-  // Create lesson progress for the user
-  await prisma.lessonProgress.createMany({
-    data: [
-      {
-        userId: 'QKYBnczm1Z06nXqdLeVuD9fuoSnCqbIq', // Static user ID
-        lessonId: animalsLesson.id,
-        lastQuestionAnswered: 1,
-        completed: false,
-        updatedAt: new Date(),
-      },
-      {
-        userId: 'QKYBnczm1Z06nXqdLeVuD9fuoSnCqbIq', // Static user ID
-        lessonId: colorsLesson.id,
-        lastQuestionAnswered: 0,
-        completed: false,
-        updatedAt: new Date(),
-      },
-    ],
+  const lessons = await prisma.lesson.findMany({
+    select: { id: true, unitId: true, order: true }
   });
-  console.log('Database seeded successfully with Spanish course!');
+
+  // Create lesson progress for each lesson
+  const lessonProgressRecords = lessons.map((lesson, index) => {
+    // Progressively mark more lessons as completed
+    const isCompleted = index < 5; // First 5 lessons completed
+    const lastQuestion = isCompleted ? 3 : 0; // Assuming 3 questions per lesson
+
+    return {
+      userId: USER_ID,
+      lessonId: lesson.id,
+      lastQuestionAnswered: lastQuestion,
+      completed: isCompleted,
+      state: isCompleted ? State.compeleted : State.not_started,
+      updatedAt: new Date()
+    };
+  });
+
+  await prisma.lessonProgress.createMany({
+    data: lessonProgressRecords
+  });
+  console.log('Database seeded successfully!');
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

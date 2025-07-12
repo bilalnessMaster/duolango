@@ -75,7 +75,7 @@ model Verification {
 }
 
 enum State {
-  compeleted 
+  completed 
   in_progress
   not_started
 }
@@ -161,7 +161,7 @@ model LessonProgress {
   lastQuestionAnswered Int     @default(0)
   completed            Boolean  @default(false)
   updatedAt            DateTime @updatedAt
-
+  state                State    @default(not_started) 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson  Lesson  @relation(fields: [lessonId], references: [id])
 

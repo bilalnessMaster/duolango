@@ -5,7 +5,7 @@ const page = async () => {
 
   const session = await caller.auth.session();
   if(session){
-    redirect("/")
+    redirect("/learn")
   }
 
   return (
