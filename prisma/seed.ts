@@ -122,7 +122,7 @@ async function main() {
       lessonId: lesson.id,
       lastQuestionAnswered: lastQuestion,
       completed: isCompleted,
-      state: isCompleted ? State.compeleted : State.not_started,
+      state: isCompleted ? State.completed : State.not_started,
       updatedAt: new Date()
     };
   });
