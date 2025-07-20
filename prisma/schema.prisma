@@ -144,10 +144,9 @@ model Progress {
   activeCourseId String
   hearts         Int      @default(5)
   points         Int      @default(0)
-
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   course         Course   @relation(fields: [activeCourseId], references: [id])
-
+  lastQuestionAnswered    Int @default(1)
   @@unique([userId, activeCourseId])
 
   @@map("progress")
