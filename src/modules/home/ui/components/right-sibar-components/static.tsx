@@ -1,22 +1,24 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import ReactCountryFlag from "react-country-flag"
-import Flag from 'react-flagpack'
+import Link from "next/link";
 
 interface Props {
   hearts?: number;
   streaks?: number;
   activeCourse?: string;
+  imageSrc?: string;
 }
 
-export const Static = ({ hearts = 0, streaks, activeCoures }: Props) => {
+export const Static = ({ hearts = 0, imageSrc, streaks, }: Props) => {
 
 
   return (
     <div className="flex items-center justify-between">
-      <ReactCountryFlag countryCode="ES" sizes="120px" />
-      <Item href="/logos/streaks.svg" statis={streaks} />
-      <Item href="/logos/heart.svg" statis={hearts} className="text-red-500" />
+      <Link href={'/course'}>
+        <Item href={imageSrc || "/logos/es.svg"}  />
+      </Link>
+      <Item href="/logos/streaks.svg" statis={streaks && streaks >= 0 ? streaks : 0} />
+      <Item href="/logos/heart.svg" statis={hearts && hearts >= 0 ? hearts : 0} className="text-red-500" />
     </div>
   )
 

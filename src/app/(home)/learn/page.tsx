@@ -1,12 +1,19 @@
 import { Wrapper } from "@/modules/home/ui/components/Wrapper";
 import { CourseView } from "@/modules/quizz/ui/view/course-view";
-import { getQueryClient, trpc } from "@/trpc/server";
+import { caller, getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 
 
-const page = () => {
+const page = async () => {
+  const progress = await caller.lesson.getProgress()
+  //   console.log("progress exit ? ", progress)
+  if (!progress) {
+    redirect('/course')
+  }
+ 
   const queyClient = getQueryClient()
   void queyClient.prefetchQuery(trpc.quizz.getCurrentCourse.queryOptions());
   return (

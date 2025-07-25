@@ -5,6 +5,7 @@ import { create } from 'zustand';
 import { saveProgress } from '../utits';
 
 interface Props {
+  lessonIsCompleted: boolean;
   progress: Progress | undefined;
   increment: number;
   setProgress: (progress: Progress) => void;
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export const useQuizzStore = create<Props>((set, get) => ({
+  lessonIsCompleted: false,
   progress: undefined,
   isCorrect: false,
   lesson: undefined,
@@ -50,21 +52,34 @@ export const useQuizzStore = create<Props>((set, get) => ({
     const { isCorrect, lesson, question, progress } = get();
     set({ Loading: true })
 
+    let checkifCompleted = question?.order === lesson?.question.length
+    console.log("is the lesson completed ", checkifCompleted)
     await saveProgress({
       lessonId: lesson?.id!!,
       unitId: lesson?.unitId!!,
       lastquestionAnswer: question?.order!!,
-      isCorrect
+      isCorrect,
+      completed: !!checkifCompleted
     })
+
+
+
     let updateProgress: Progress
+
     if (progress) {
       updateProgress = {
         ...progress,
         lastQuestionAnswered: question?.order!!,
-        hearts: !isCorrect && progress ? progress?.hearts - 1 : progress?.hearts
+        hearts: !isCorrect && progress ? progress?.hearts - 1 : progress?.hearts,
+        points: isCorrect && progress ? progress?.points + 1 : progress?.points,
       }
       set({ progress: updateProgress })
     }
+
+    if (checkifCompleted) {
+      set({ lessonIsCompleted: true })
+    }
+
     set({ checked: false, Loading: false })
   },
 }))

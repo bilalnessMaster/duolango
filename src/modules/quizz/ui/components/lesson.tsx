@@ -27,7 +27,7 @@ export const Lesson = ({ currentLesson, href, state, index }: Props) => {
   return (
     <>
       {
-        state === "compeleted" ?
+        state === "completed" ?
           (
             <LinkState href={href} currentLesson={currentLesson} position={position()} state={state} />
           )
@@ -55,7 +55,7 @@ const LinkState = ({ href, currentLesson, state, position }: Props) => {
     switch (state) {
       case "in_progress":
         return "bg-[#58CC02] shadow-[#46A302] border border-[#46A302]"
-      case "compeleted":
+      case "completed":
         return "bg-[#FFC800] shadow-[#E6A100] border border-[#E6A100]"
       case "not_started":
         return "text-neutral-500 shadow-neutral-200 border border-neutral-100"
@@ -74,7 +74,7 @@ const LinkState = ({ href, currentLesson, state, position }: Props) => {
         position,
         {
           "bg-[#58CC02] shadow-[#46A302] border border-[#46A302] ": currentLesson,
-          "hover:shadow-[0px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-2 transition-all": currentLesson || state === 'compeleted'
+          "hover:shadow-[0px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-2 transition-all": currentLesson || state === 'completed'
         },
       )}>
         {

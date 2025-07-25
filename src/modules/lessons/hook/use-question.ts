@@ -3,9 +3,11 @@ import { useQuizzStore } from "../store/quizz-store"
 
 
 export const useLesson = () => {
-  const { setIsCorrect, Loading, checkOption, isCorrect, question, progress, nextQuestion, setLesson, checked } = useQuizzStore();
+  const {lesson, lessonIsCompleted, setIsCorrect, Loading, checkOption, isCorrect, question, progress, nextQuestion, setLesson, checked } = useQuizzStore();
 
   return {
+    lesson, 
+    lessonIsCompleted,
     Loading,
     setIsCorrect,
     isCorrect,

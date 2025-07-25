@@ -61,7 +61,7 @@ async function main() {
       });
 
       // Create 3 questions per lesson
-      for (let q = 1; q <= 3; q++) {
+      for (let q = 1; q <= 7; q++) {
         const question = await prisma.question.create({
           data: {
             id: `q_${unitIndex + 1}_${index + 1}_${q}`,
@@ -90,6 +90,15 @@ async function main() {
               order: 2,
               isCorrect: false
             },
+            {
+              id: `opt_${unitIndex + 1}_${index + 1}_${q}_3`,
+              imageSrc: `logos/${q % 2 === 0 ? 'cat' : 'dog'}.svg`,
+              audioSrc: `audios/${AUDIO_PATHS[(unitIndex + index + q + 1) % AUDIO_PATHS.length]}`,
+              questionId: question.id,
+              order: 2,
+              isCorrect: false
+            },
+
             // Add 2 more options...
           ]
         });
@@ -98,38 +107,38 @@ async function main() {
   }
 
   // Create user progress
-  await prisma.progress.create({
-    data: {
-      userId: USER_ID,
-      activeCourseId: spanishCourse.id,
-      hearts: 5,
-      points: 0
-    }
-  });
+  // await prisma.progress.create({
+  //  data: {
+  //    userId: USER_ID,
+  //    activeCourseId: spanishCourse.id,
+  //    hearts: 5,
+  //    points: 0
+  //  }
+  // });
 
-  const lessons = await prisma.lesson.findMany({
-    select: { id: true, unitId: true, order: true }
-  });
+  // const lessons = await prisma.lesson.findMany({
+  //  select: { id: true, unitId: true, order: true }
+  // });
 
   // Create lesson progress for each lesson
-  const lessonProgressRecords = lessons.map((lesson, index) => {
-    // Progressively mark more lessons as completed
-    const isCompleted = index < 5; // First 5 lessons completed
-    const lastQuestion = isCompleted ? 3 : 0; // Assuming 3 questions per lesson
+  // const lessonProgressRecords = lessons.map((lesson, index) => {
+  // Progressively mark more lessons as completed
+  //  const isCompleted = index < 5; // First 5 lessons completed
+  //  const lastQuestion = isCompleted ? 3 : 0; // Assuming 3 questions per lesson
 
-    return {
-      userId: USER_ID,
-      lessonId: lesson.id,
-      lastQuestionAnswered: lastQuestion,
-      completed: isCompleted,
-      state: isCompleted ? State.completed : State.not_started,
-      updatedAt: new Date()
-    };
-  });
+  //  return {
+  //    userId: USER_ID,
+  //    lessonId: lesson.id,
+  //    lastQuestionAnswered: lastQuestion,
+  //    completed: isCompleted,
+  //    state: isCompleted ? State.completed : State.not_started,
+  //    updatedAt: new Date()
+  //  };
+  // });
 
-  await prisma.lessonProgress.createMany({
-    data: lessonProgressRecords
-  });
+  // await prisma.lessonProgress.createMany({
+  //  data: lessonProgressRecords
+  // });
   console.log('Database seeded successfully!');
 }
 

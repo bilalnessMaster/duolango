@@ -1,7 +1,8 @@
-import { getQueryClient, trpc } from "@/trpc/server";
+import { caller, getQueryClient, trpc } from "@/trpc/server";
 import { RightSideBar, RightSideBarSkeleton } from "./right-side-bar";
 import { Suspense } from "react";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
 
 interface Props {
   children: React.ReactNode;
