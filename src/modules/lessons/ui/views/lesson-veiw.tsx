@@ -18,7 +18,6 @@ export const LessonView = () => {
   const { data: progress } = useSuspenseQuery(trpc.lesson.getProgress.queryOptions())
 
   useEffect(() => {
-    console.log('this is the current lesson : ', currentLesson)
     setLesson(currentLesson.lesson as Lesson & { question: (Question & { options: Option[] })[] } , progress as Progress )
   }, [currentLesson, progress])
 

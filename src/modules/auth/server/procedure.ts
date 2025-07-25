@@ -20,13 +20,18 @@ export const authRouter = createTRPCRouter({
       password: z.string().min(6, { message: "Password has to be atleast 6 characters long" }),
     })
   ).mutation(async ({ input }) => {
-    await auth.api.signInEmail({
-      body: {
-        email: input.email,
-        password: input.password
-      },
-      asResponse: true
-    })
+    try {
+      await auth.api.signInEmail({
+        body: {
+          email: input.email,
+          password: input.password
+        },
+      })
+
+      return { success: true }
+    } catch (error) {
+      return { success: false }
+    }
 
   }),
   signUp: baseProcedure.input(
@@ -37,15 +42,21 @@ export const authRouter = createTRPCRouter({
       password: z.string().min(6, { message: "Password has to be atleast 6 characters long" }),
     })
   ).mutation(async ({ input }) => {
-    await auth.api.signUpEmail({
-      body: {
-        name: input.name,
-        email: input.email,
-        password: input.password
-      },
-      asResponse: true
-    })
+    try {
+      await auth.api.signUpEmail({
+        body: {
+          name: input.name,
+          email: input.email,
+          password: input.password
+        },
+      })
 
+
+      return { success: true }
+    } catch (error) {
+
+      return { success: false }
+    }
   })
 
 })

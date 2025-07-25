@@ -34,7 +34,7 @@ export const Quest = ({ xp }: Props) => {
                 height={30}
                 alt={"your quest"} />
             </div>
-            <Progress value={xp} className="h-4 rounded-full w-full  " />
+            <Progress value={(xp ?? 0)*10} className="h-4 rounded-full w-full  " />
           </div>
         </div>
       </div>

@@ -8,7 +8,6 @@ import {
   FormMessage,
   Form
 } from "@/components/ui/form"
-// import goolge from '/logos/google.svg'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
@@ -18,6 +17,7 @@ import Image from "next/image"
 import { useTRPC } from "@/trpc/client"
 import { useMutation } from "@tanstack/react-query"
 import { LoaderCircleIcon, LoaderIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const signInSchema = z.object({
   email: z.string().email(),
@@ -26,6 +26,7 @@ const signInSchema = z.object({
 
 
 export const SignInForm = () => {
+  const router = useRouter()
   const trpc = useTRPC();
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -37,6 +38,9 @@ export const SignInForm = () => {
   const { mutate: signIn, isPending } = useMutation(trpc.auth.signIn.mutationOptions({
     onSuccess: (data) => {
       console.log("onSuccess :", data)
+      if(data.success){
+        router.push("/learn")
+      }
     },
     onError: (error) => {
       console.log("onError:", error)

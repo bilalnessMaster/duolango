@@ -1,3 +1,4 @@
+import { courseRouter } from '@/modules/course/server/procedure';
 import { createTRPCRouter } from '../init';
 import { authRouter } from '@/modules/auth/server/procedure';
 import { lessonRouter } from '@/modules/lessons/server/procedured';
@@ -8,6 +9,7 @@ export const appRouter = createTRPCRouter({
   statics : staticsRouter,
   quizz : quizzRouter,
   lesson : lessonRouter,
+  course : courseRouter,
 
 
 });

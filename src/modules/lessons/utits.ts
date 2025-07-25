@@ -9,13 +9,15 @@ interface saveProgressProps {
   lessonId: string;
   unitId: string;
   lastquestionAnswer: number;
+  completed: boolean;
 }
 
-export const saveProgress = async ({ isCorrect, lessonId, unitId, lastquestionAnswer }: saveProgressProps) => {
+export const saveProgress = async ({ isCorrect, lessonId, unitId, lastquestionAnswer, completed }: saveProgressProps) => {
   await caller.lesson.saveProgress({
     lessonId,
     unitId,
     lastquestionAnswer,
-    isCorrect
+    isCorrect,
+    completed
   })
 }

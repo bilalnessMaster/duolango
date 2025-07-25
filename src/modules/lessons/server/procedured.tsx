@@ -8,6 +8,7 @@ export const lessonRouter = createTRPCRouter({
 
     console.log("entre the query : ")
     const user = ctx.session.user
+
     if (!user) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
@@ -57,9 +58,37 @@ export const lessonRouter = createTRPCRouter({
       }
 
 
-      const currentLesson = course.units
+      const currentLessonWithProgess = course.units
         .flatMap(unit => unit.lessons)
         .find(lesson => lesson != null)
+      const lessons = await Promise.all(course?.units.map(async (unit) => {
+
+        const formatedLesson = await Promise.all(unit?.lessons.map(async (lesson) => {
+          const progress = await ctx.db.lessonProgress.findUnique({
+            where: {
+              userId_lessonId: {
+                userId: user.id as string,
+                lessonId: lesson.id as string
+              }
+            }
+          })
+          return {
+            ...lesson,
+            progress
+          }
+        }))
+
+        return {
+          ...unit,
+          lessons: formatedLesson
+        }
+      }))
+      //        console.log("lessons", JSON.stringify(lessons, null, 4))
+      const currentLesson = lessons.flatMap((unit) => unit.lessons).find((lesson) => !lesson?.progress?.completed || progress === null)
+      //   console.log("current lesson is ", currentlesson)
+
+
+
 
       if (!currentLesson) {
         throw new TRPCError({
@@ -90,6 +119,7 @@ export const lessonRouter = createTRPCRouter({
         })
       }
 
+      //      console.log('user id is', user.id, 'lesson id is ', lesson.id)
 
       await ctx.db.lessonProgress.create({
         data: {
@@ -124,8 +154,30 @@ export const lessonRouter = createTRPCRouter({
     lessonId: z.string(),
     isCorrect: z.boolean(),
     lastquestionAnswer: z.number(),
+    completed: z.boolean(),
   })).mutation(async ({ ctx, input }) => {
     const user = ctx.session.user
+
+    if (input.completed) {
+      await ctx.db.lessonProgress.upsert({
+        where: {
+          userId_lessonId: {
+            userId: user.id!!,
+            lessonId: input.lessonId,
+          }
+        },
+        update: {
+          completed: true,
+          state: 'completed'
+        },
+        create: {
+          completed: true,
+          state: 'completed',
+          userId: user.id!!,
+          lessonId: input.lessonId
+        }
+      })
+    }
     await ctx.db.progress.update({
       where: {
         userId: user.id!!

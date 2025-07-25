@@ -1,0 +1,12 @@
+ {
+          !checked && !isCorrect ? (
+            <div className="size-17 rounded-full bg-red-200 items-center justify-center flex">
+              <X className="size-9 text-red-900" />
+            </div>
+          ) : (
+            <div className="size-17 rounded-full bg-green-300 items-center justify-center flex">
+              <Check className="size-9 text-green-900" />
+            </div>
+          )
+        }
+
