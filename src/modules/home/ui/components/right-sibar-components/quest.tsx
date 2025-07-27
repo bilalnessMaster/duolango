@@ -4,11 +4,12 @@ import { HeaderLink } from "./rank"
 import { Progress } from "@/components/ui/progress"
 
 interface Props {
-  xp?: number
+  xp?: number;
+  title: string;
 }
 
 
-export const Quest = ({ xp }: Props) => {
+export const Quest = ({ xp, title }: Props) => {
 
 
   return (
@@ -18,7 +19,7 @@ export const Quest = ({ xp }: Props) => {
         <Image src={"/logos/points.svg"} width={50} className="rounded" height={30} alt={"your quest"} />
         <div className="space-y-2  w-full">
           <h1 className="text-[17px] font-semibold">
-            Earn 10 XP
+            {title}
           </h1>
           <div className="relative h-4 items-center flex">
             <span className="absolute left-1/2 z-30  font-semibold -translate-x-1/2 text-amber-600">
@@ -34,7 +35,7 @@ export const Quest = ({ xp }: Props) => {
                 height={30}
                 alt={"your quest"} />
             </div>
-            <Progress value={(xp ?? 0)*10} className="h-4 rounded-full w-full  " />
+            <Progress value={(xp ?? 0) * 10} className="h-4 rounded-full w-full  " />
           </div>
         </div>
       </div>

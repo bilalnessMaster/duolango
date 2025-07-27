@@ -184,7 +184,8 @@ export const lessonRouter = createTRPCRouter({
       },
       data: {
         // order : input.question
-        hearts: { increment: !input.isCorrect ? -1 : 0 },
+        lessons: { increment: 1 },
+        hearts: { increment: !input.iscorrect ? -1 : 0 },
         points: { increment: input.isCorrect ? 1 : 0 },
       }
     })

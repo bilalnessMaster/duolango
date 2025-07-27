@@ -1,4 +1,5 @@
 import { Wrapper } from "@/modules/home/ui/components/Wrapper";
+import { ShopView } from "@/modules/shop/ui/views/shop-view";
 import { caller, getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
@@ -19,10 +20,8 @@ const page = async () => {
     <Wrapper>
       <HydrationBoundary state={dehydrate(queyClient)} >
         <Suspense >
-          <h1>
-            leaderboard
-          </h1>
-        </Suspense>
+        <ShopView />
+       </Suspense>
       </HydrationBoundary>
 
     </Wrapper>

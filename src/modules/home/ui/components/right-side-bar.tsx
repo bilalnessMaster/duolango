@@ -20,7 +20,7 @@ export const RightSideBar = () => {
       <Static hearts={data.progress?.hearts} imageSrc={data?.progress?.course?.imageSrc}  streaks={data.progress?.hearts} />
       <Subscrib isSubcribed={data.user?.isSubscribed || false} />
       <Rank position={1} xp={data.progress?.points} />
-      <Quest xp={data.progress?.points} />
+      <Quest title={"Earn 10 XP"} xp={data.progress?.points} />
     </div>
   )
 }

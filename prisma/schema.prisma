@@ -142,6 +142,7 @@ model Progress {
   userName       String   @default("User")
   userImageSrc   String   @default("/mascot.svg")
   activeCourseId String
+  lessons        Int      @default(0)
   hearts         Int      @default(5)
   points         Int      @default(0)
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)

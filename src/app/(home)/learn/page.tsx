@@ -14,11 +14,11 @@ const page = async () => {
     redirect('/course')
   }
  
-  const queyClient = getQueryClient()
-  void queyClient.prefetchQuery(trpc.quizz.getCurrentCourse.queryOptions());
+  const queryClient = getQueryClient()
+  void queryClient.prefetchQuery(trpc.quizz.getCurrentCourse.queryOptions());
   return (
     <Wrapper>
-      <HydrationBoundary state={dehydrate(queyClient)} >
+      <HydrationBoundary state={dehydrate(queryClient)} >
         <Suspense >
           <CourseView/>
         </Suspense>
