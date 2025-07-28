@@ -20,7 +20,8 @@ model User {
   name          String?
   emailVerified Boolean
   image         String?
-  isSubscribed  Boolean?
+  isSubscribed  Boolean?  
+  subscriptionId String?  @unique
   createdAt     DateTime
   updatedAt     DateTime
   sessions      Session[]

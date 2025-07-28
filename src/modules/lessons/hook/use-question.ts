@@ -3,10 +3,12 @@ import { useQuizzStore } from "../store/quizz-store"
 
 
 export const useLesson = () => {
-  const {lesson, lessonIsCompleted, setIsCorrect, Loading, checkOption, isCorrect, question, progress, nextQuestion, setLesson, checked } = useQuizzStore();
+  const { refresh, user, lesson, lessonIsCompleted, setIsCorrect, Loading, checkOption, isCorrect, question, progress, nextQuestion, setLesson, checked } = useQuizzStore();
 
   return {
-    lesson, 
+    refresh,
+    user,
+    lesson,
     lessonIsCompleted,
     Loading,
     setIsCorrect,

@@ -13,14 +13,25 @@ export const RightSideBar = () => {
 
   const { data } = useSuspenseQuery(trpc.statics.getStatics.queryOptions())
 
-  console.log(" data => ", data)
+//  console.log(" data => ", data)
 
   return (
     <div className="sticky top-6 w-full space-y-3 ">
-      <Static hearts={data.progress?.hearts} imageSrc={data?.progress?.course?.imageSrc}  streaks={data.progress?.hearts} />
+      <Static 
+      hearts={data.progress?.hearts} 
+      imageSrc={data?.progress?.course?.imageSrc}  
+      streaks={data.progress?.hearts}
+      isSubscribed={data?.user?.isSubscribed!!}
+      />
       <Subscrib isSubcribed={data.user?.isSubscribed || false} />
-      <Rank position={1} xp={data.progress?.points} />
-      <Quest title={"Earn 10 XP"} xp={data.progress?.points} />
+      <Rank 
+      position={1} 
+      xp={data.progress?.points} 
+      />
+      <Quest 
+      title={"Earn 10 XP"} 
+      xp={data.progress?.points} 
+      />
     </div>
   )
 }

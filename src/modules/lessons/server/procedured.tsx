@@ -1,4 +1,4 @@
-import { baseProcedure, createTRPCRouter, protectedProcedure } from "@/trpc/init";
+import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
@@ -185,7 +185,9 @@ export const lessonRouter = createTRPCRouter({
       data: {
         // order : input.question
         lessons: { increment: 1 },
-        hearts: { increment: !input.iscorrect ? -1 : 0 },
+        hearts: {
+          increment: user.isSubscribed ? 0 : !input.isCorrect ? -1 : 0
+        },
         points: { increment: input.isCorrect ? 1 : 0 },
       }
     })
@@ -200,6 +202,6 @@ export const lessonRouter = createTRPCRouter({
       },
     })
 
-    return progress;
+    return {progress, user};
   })
 })

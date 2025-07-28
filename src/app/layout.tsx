@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Barlow } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 const barlow = Barlow({
   subsets: ['latin'],
@@ -25,7 +26,9 @@ export default function RootLayout({
         <body
           className={`${barlow.variable}  antialiased`}
         >
-          {children}
+          <NuqsAdapter>
+            {children}
+          </NuqsAdapter>
         </body>
       </html>
     </TRPCReactProvider>

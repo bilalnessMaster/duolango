@@ -29,7 +29,7 @@ export const Subscrib = ({ isSubcribed }: Props) => {
             variant={'duolango'}
             size={'xl'}
             className="border-indigo-500 bg-indigo-500 w-full shadow-indigo-600 text-white rounded-xl" >
-            subcribed
+            subscribed
           </Button>
 
         ) : (

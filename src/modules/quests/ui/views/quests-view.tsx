@@ -9,7 +9,7 @@ import Image from "next/image"
 
 export const QuestView = () => {
   const trpc = useTRPC();
-  const { data: progress } = useSuspenseQuery(trpc.lesson.getProgress.queryOptions());
+  const { data } = useSuspenseQuery(trpc.lesson.getProgress.queryOptions());
   //  console.log("progress in quest : ", progress)
   return (
     <div className="font-sans py-5 space-y-4">
@@ -25,8 +25,8 @@ export const QuestView = () => {
       <div className=" ">
         <h1 className="text-[24px] font-semibold ">Daily Quests</h1>
       </div>
-      <Quest xp={progress?.points} number={10} title="Earn 10 XP today" />
-      <Quest xp={progress?.lessons ?? 0} number={5} title="Finish 5 lesson today" />
+      <Quest xp={data.progress?.points} number={10} title="Earn 10 XP today" />
+      <Quest xp={data.progress?.lessons ?? 0} number={5} title="Finish 5 lesson today" />
     </div>
   )
 }
