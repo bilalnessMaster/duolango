@@ -6,20 +6,25 @@ import { useEffect } from "react"
 import { useLesson } from "../../hook/use-question"
 import { Card } from "../components/Card"
 import { Footer } from "../components/footer"
-import { Lesson, Option, Progress, Question } from "@/generated/prisma"
+import { Lesson, Option, Progress, Question, User } from "@/generated/prisma"
 
 
 
 
 export const LessonView = () => {
-  const { setLesson } = useLesson()
+  const { setLesson, refresh } = useLesson()
   const trpc = useTRPC()
   const { data: currentLesson, isPending } = useSuspenseQuery(trpc.lesson.getLesson.queryOptions());
-  const { data: progress } = useSuspenseQuery(trpc.lesson.getProgress.queryOptions())
+  const { data } = useSuspenseQuery(trpc.lesson.getProgress.queryOptions())
 
   useEffect(() => {
-    setLesson(currentLesson.lesson as Lesson & { question: (Question & { options: Option[] })[] } , progress as Progress )
-  }, [currentLesson, progress])
+    refresh()
+    setLesson(
+      currentLesson.lesson as Lesson & { question: (Question & { options: Option[] })[] },
+      data.progress as Progress,
+      data.user as User
+    )
+  }, [currentLesson, data.progress])
 
   if (isPending) return <div>Loading...</div>
 

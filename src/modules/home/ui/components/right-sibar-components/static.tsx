@@ -7,18 +7,26 @@ interface Props {
   streaks?: number;
   activeCourse?: string;
   imageSrc?: string;
+  isSubscribed: boolean;
 }
 
-export const Static = ({ hearts = 0, imageSrc, streaks, }: Props) => {
+export const Static = ({ hearts = 0, imageSrc, streaks, isSubscribed }: Props) => {
 
 
   return (
     <div className="flex items-center justify-between">
       <Link href={'/course'}>
-        <Item href={imageSrc || "/logos/es.svg"}  />
+        <Item href={imageSrc || "/logos/es.svg"} />
       </Link>
-      <Item href="/logos/streaks.svg" statis={streaks && streaks >= 0 ? streaks : 0} />
-      <Item href="/logos/heart.svg" statis={hearts && hearts >= 0 ? hearts : 0} className="text-red-500" />
+      <Item
+        href="/logos/streaks.svg"
+        statis={streaks && streaks >= 0 ? streaks : 0}
+      />
+      <Item
+        href="/logos/heart.svg"
+        statis={isSubscribed ? '∞' : streaks && streaks >= 0 ? streaks : 0}
+        className="text-red-500"
+      />
     </div>
   )
 
@@ -38,7 +46,7 @@ const Item = ({ href, className, statis }: { href: string, className?: string, s
         height={30}
         alt={href}
       />
-      <h2 className="font-semibold">{statis}</h2>
+      <h2 className="font-semibold text-lg">{statis}</h2>
     </div>
   )
 }

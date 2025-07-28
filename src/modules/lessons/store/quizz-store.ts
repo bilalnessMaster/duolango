@@ -1,26 +1,33 @@
-import { Lesson, Option, Progress, Question } from '@/generated/prisma';
+import { Lesson, Option, Progress, Question, User } from '@/generated/prisma';
 import { caller } from '@/trpc/server';
 import { Underdog } from 'next/font/google';
 import { create } from 'zustand';
 import { saveProgress } from '../utits';
 
 interface Props {
+  user: User | undefined;
   lessonIsCompleted: boolean;
   progress: Progress | undefined;
   increment: number;
   setProgress: (progress: Progress) => void;
   question: Question & { options: Option[] } | undefined;
   lesson: Lesson & { question: (Question & { options: Option[] })[] } | undefined;
-  setLesson: (lesson: Lesson & { question: (Question & { options: Option[] })[] }, progress: Progress) => void,
+  setLesson: (
+    lesson: Lesson & { question: (Question & { options: Option[] })[] },
+    progress: Progress,
+    user: User
+  ) => void,
   nextQuestion: () => void;
   setIsCorrect: (value: boolean) => void;
   isCorrect: boolean;
   checked: boolean;
   checkOption: () => void;
   Loading: boolean;
+  refresh: () => void;
 }
 
 export const useQuizzStore = create<Props>((set, get) => ({
+  user: undefined,
   lessonIsCompleted: false,
   progress: undefined,
   isCorrect: false,
@@ -29,9 +36,23 @@ export const useQuizzStore = create<Props>((set, get) => ({
   increment: 1,
   checked: true,
   question: undefined,
+  refresh: () => {
+    set({
+      user: undefined,
+      lessonIsCompleted: false,
+      progress: undefined,
+      isCorrect: false,
+      lesson: undefined,
+      Loading: false,
+      increment: 1,
+      checked: true,
+      question: undefined,
+
+    })
+  },
   setProgress: (progress) => set({ progress }),
-  setLesson: (lesson, progress) => {
-    set({ lesson, question: lesson?.question?.[0], progress })
+  setLesson: (lesson, progress, user) => {
+    set({ lesson, question: lesson?.question?.[0], progress, user })
   },
   nextQuestion: () => {
     const { lesson, increment } = get()

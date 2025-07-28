@@ -2,7 +2,7 @@ import Image from "next/image";
 
 
 interface Props {
-  hearts: number;
+  hearts: number | string;
 }
 
 export const Hearts = ({ hearts }: Props) => {
