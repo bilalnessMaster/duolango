@@ -34,6 +34,8 @@ export const QuestView = () => {
 
 
 const Quest = ({ xp, title, number }: { xp?: number, title: string, number?: number }) => {
+  const xpValue = Math.min(xp!, number!)
+
   return (
     <div className="px-3 py-5 flex  gap-x-3 border-2 border-neutral-100 rounded-lg items-center justify-center">
       <div className="w-full flex  gap-x-3 ">
@@ -45,7 +47,7 @@ const Quest = ({ xp, title, number }: { xp?: number, title: string, number?: num
           <div className="relative h-4 items-center flex">
             <span className="absolute left-1/2 z-30  font-semibold -translate-x-1/2 text-amber-600">
               {
-                `${xp} / ${number} `
+                `${xpValue} / ${number} `
               }
             </span>
             <div className="z-30 bg-white p-[2px] absolute right-0">
@@ -56,7 +58,8 @@ const Quest = ({ xp, title, number }: { xp?: number, title: string, number?: num
                 height={30}
                 alt={"your quest"} />
             </div>
-            <Progress value={(xp ?? 0) * 10} className="h-4 rounded-full w-full  " />
+            <Progress value={Math.round((xpValue / number!) *100)} className="h-4 rounded-full w-full  " />
+
           </div>
         </div>
       </div>

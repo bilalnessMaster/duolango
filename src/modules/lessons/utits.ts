@@ -21,3 +21,8 @@ export const saveProgress = async ({ isCorrect, lessonId, unitId, lastquestionAn
     completed
   })
 }
+export const refill = async ({ completed }: { completed: boolean }) => {
+  await caller.relesson.saveProgress({
+    completed
+  })
+}
