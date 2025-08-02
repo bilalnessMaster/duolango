@@ -16,7 +16,7 @@ export const ResultView = () => {
     src: "/audios/finish.mp3",
   })
 
-  const { progress, lesson } = useLesson();
+  const { progress, lesson, rightAnswers } = useLesson();
 
   useEffect(() => {
     if (!isLoading) {
@@ -35,7 +35,8 @@ export const ResultView = () => {
       </div>
     )
   };
-
+  const xp = progress?.points;
+  const percentage = lesson?.question?.length ? Math.round((rightAnswers / lesson?.question?.length) * 100) : 0
   return (
     <div className="h-screen w-full items-center justify-center flex gap-y-3 relative flex-col">
       {audio}
@@ -53,10 +54,10 @@ export const ResultView = () => {
       <div className='items-center justify-center flex gap-x-3 '>
 
         <Result className="text-amber-400 bg-amber-400" title='Total XP'>
-          {progress?.points}xp
+          {xp}xp
         </Result>
         <Result className="text-green-400 bg-green-400" title="Amazing">
-          {(lesson?.question.length ?? 12) * 10} %
+          {percentage} %
         </Result>
       </div>
 
@@ -67,11 +68,11 @@ export const ResultView = () => {
 
 
 
-const Result = ({title, children, className }: {title: string, className: string, children: React.ReactNode }) => {
+const Result = ({ title, children, className }: { title: string, className: string, children: React.ReactNode }) => {
   return (
     <div className={cn("    py-0.5 p-0.5  rounded-xl font-semibold font-sans ", className)}>
       <div className='p-2  text-center text-white'>
-      <h1>{title}</h1>
+        <h1>{title}</h1>
       </div>
       <div className=" bg-white size-32 flex items-center justify-center rounded-lg  uppercase">
         {children}
