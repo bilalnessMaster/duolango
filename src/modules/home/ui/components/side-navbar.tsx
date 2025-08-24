@@ -27,6 +27,12 @@ const links = [
     slug: "leaderboard",
     icon: "/logos/leaderboard.svg"
   },
+  {
+    href: "/profile",
+    slug: "profile",
+    icon: "/logos/profile.png"
+  },
+
 ]
 export const SideNavBar = () => {
 
@@ -61,7 +67,7 @@ const LinkItem = ({ href, icon, slug }: { href: string, icon: string, slug: stri
         "border-2 rounded-xl border-sky-400/45 bg-sky-100/85 text-sky-400  ": isActive
       })}>
         <Image src={icon} width={35} height={35} alt={slug} />
-        <h2 className="hidden lg:block font-semibold font-sans text-base uppercase tracking-wide ">{slug}</h2>
+        <h2 className="hidden lg:block font-semibold font-sans rounded-full text-base uppercase tracking-wide ">{slug}</h2>
       </div>
     </Link>
 
