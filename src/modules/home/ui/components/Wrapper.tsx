@@ -10,7 +10,7 @@ interface Props {
 
 
 export const Wrapper = async ({ children }: Props) => {
-
+ 
   const queyClient = getQueryClient();
   void queyClient.prefetchQuery(trpc.statics.getStatics.queryOptions());
 

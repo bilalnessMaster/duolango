@@ -6,6 +6,7 @@ import { quizzRouter } from '@/modules/quizz/server/procedure';
 import { staticsRouter } from '@/modules/statics/server/procedure';
 import { shopRouter } from '@/modules/shop/server/procedure';
 import { relessonRouter } from '@/modules/relesson/server/procedure';
+import { profileRoute } from '@/modules/profile/server/procedure';
 export const appRouter = createTRPCRouter({
 
   auth: authRouter,
@@ -15,7 +16,7 @@ export const appRouter = createTRPCRouter({
   course: courseRouter,
   shop: shopRouter,
   relesson: relessonRouter,
-
+  profile: profileRoute,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;

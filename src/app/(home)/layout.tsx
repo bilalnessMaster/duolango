@@ -1,4 +1,6 @@
 import { SideNavBar } from "@/modules/home/ui/components/side-navbar";
+import { caller } from "@/trpc/server";
+import { redirect } from "next/navigation";
 import { Toaster } from "sonner";
 
 interface Props {
@@ -7,9 +9,11 @@ interface Props {
 }
 
 
-const layout = ({ children }: Props) => {
-
-
+const layout = async ({ children }: Props) => {
+  const session = await caller.auth.session();
+  if (!session) {
+    redirect("/sign-in")
+  }
   return (
     <div className="flex h-screen -full">
       <div>
