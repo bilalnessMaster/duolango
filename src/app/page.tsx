@@ -1,20 +1,17 @@
-'use client'
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useTRPC } from "@/trpc/client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Header } from "@/components/landing-page/header";
+import { Hero } from "@/components/landing-page/hero";
+import { caller } from "@/trpc/server";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  const trpc = useTRPC();
-  const { data: session } = useQuery(trpc.auth.session.queryOptions());
-  console.log("session :", session)
+export default async function Home() {
+  const session = await caller.auth.session();
+  if (session) {
+    redirect("/learn")
+  }
   return (
-    <div className="flex w-full flex-col mx-auto text-neutral-900 gap-y-3 max-w-md p-4 mt-3 items-center justify-center">
-      <pre>
-        <code>
-          {JSON.stringify(session, null, 2)}
-        </code>
-      </pre>
+    <div className="max-w-(--breakpoint-xl)  mx-auto   text-neutral-900 gap-y-3  p-4 mt-3 ">
+      <Header />
+      <Hero />
     </div>
   );
 }
